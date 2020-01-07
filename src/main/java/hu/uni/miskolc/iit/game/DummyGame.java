@@ -156,7 +156,7 @@ public class DummyGame implements IGameLogic {
     }
     @Override
     public void input(Window window) {
-        if (direction == 1) {
+        if (playerObject.getDirection() == 1) {
             playerObject.SetCurrentFrame(0);
         } else {
             playerObject.SetCurrentFrame(1);

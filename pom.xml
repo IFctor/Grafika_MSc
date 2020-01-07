@@ -5,11 +5,11 @@
   <modelVersion>4.0.0</modelVersion>
 
     <groupId>hu.uni.miskolc.iit</groupId>
-    <artifactId>LWJGL2DScene</artifactId>
+    <artifactId>GrafBead</artifactId>
   <version>1.0-SNAPSHOT</version>
 
-    <name>LWJGL 2D Scene maven project</name>
-    <url>https://users.iit.uni-miskolc.hu/~mileff/</url>
+    <name>Grafika MSc Beadandó</name>
+    <url>https://users.iit.uni-miskolc.hu/~madi/</url>
 
   <properties>
       <!-- **************************   Change java version as required  (recommended 1.8+) *************************************************-->

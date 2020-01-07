@@ -30,7 +30,7 @@ public class Present extends GameObject2D {
 
     private void init(){
         startPos = r.nextInt((20 - 0) + 1) + 0;
-        this.SetPosition(50+startPos*50,0);
+        this.SetPosition(50+startPos*50,-100);
         moveSpeed = (r.nextInt((3 - 1) + 1) + 1)/1.2f;
         collected=false;
     }
