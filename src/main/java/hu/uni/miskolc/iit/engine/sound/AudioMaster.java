@@ -44,7 +44,8 @@ public class AudioMaster {
     }
 
     private static void initDefault() {
-        GAME_MUSIC = loadSound(SOUNDS_LOCATION + "smb_mario_theme" + SOUNDS_EXTENSION);
+        //GAME_MUSIC = loadSound(SOUNDS_LOCATION + "smb_mario_theme" + SOUNDS_EXTENSION);
+        GAME_MUSIC = loadSound(SOUNDS_LOCATION + "JingleBells" + SOUNDS_EXTENSION);
         WIN_MUSIC = loadSound(SOUNDS_LOCATION + "smb_stage_clear" + SOUNDS_EXTENSION);
         DEATH_SOUND = loadSound(SOUNDS_LOCATION + "smb_mariodie" + SOUNDS_EXTENSION);
         JUMP_SOUND = loadSound(SOUNDS_LOCATION + "smb_jump-small" + SOUNDS_EXTENSION);

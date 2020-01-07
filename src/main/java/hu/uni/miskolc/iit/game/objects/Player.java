@@ -2,7 +2,9 @@ package hu.uni.miskolc.iit.game.objects;
 
 import hu.uni.miskolc.iit.config.AppConfig;
 import hu.uni.miskolc.iit.engine.GameObject2D;
+import hu.uni.miskolc.iit.engine.MusicManager;
 import hu.uni.miskolc.iit.engine.math.Vector2D;
+import hu.uni.miskolc.iit.engine.sound.AudioMaster;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -60,13 +62,19 @@ public class Player extends GameObject2D{
     }
 
     private void movePlayer(){
-
+        if(this.dying==false){
         Vector2D pos = this.GetPosition();
         pos.x += direction*baseMove*this.moveSpeed;
         if (pos.x> rightSide)
         {pos.x=rightSide;}
         else if (pos.x<leftSide){pos.x=leftSide;}
         this.SetPosition(pos);
+        }
+    }
+
+    public void die() {
+        MusicManager.deathSound.play(AudioMaster.DEATH_SOUND);
+        this.dying=true;
     }
 
     public Player(int id) {

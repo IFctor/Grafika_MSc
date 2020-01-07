@@ -137,7 +137,7 @@ public class DummyGame implements IGameLogic {
     }
 
     private void initSound(){
-        MusicManager.gameMusic.setVolume(0.64f);
+        MusicManager.gameMusic.setVolume(0.15f);
         MusicManager.gameMusic.setLooping(true);
         MusicManager.gameMusic.play(AudioMaster.GAME_MUSIC);
 
@@ -173,6 +173,10 @@ public class DummyGame implements IGameLogic {
             playerObject.addSpeedBoost();
         } else if (window.isKeyPressed(GLFW_KEY_W)) {
             playerObject.minusSpeedBoost();
+        }
+
+        if(window.isKeyPressed(GLFW_KEY_F1)){
+            playerObject.die();
         }
     }
 
