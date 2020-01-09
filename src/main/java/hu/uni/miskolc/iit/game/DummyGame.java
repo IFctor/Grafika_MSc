@@ -5,6 +5,8 @@ import hu.uni.miskolc.iit.config.AppConfig;
 import hu.uni.miskolc.iit.engine.*;
 import hu.uni.miskolc.iit.engine.math.Vector2D;
 import hu.uni.miskolc.iit.engine.sound.AudioMaster;
+import hu.uni.miskolc.iit.game.objects.FallenObject;
+import hu.uni.miskolc.iit.game.objects.FallenObjectManager;
 import hu.uni.miskolc.iit.game.objects.Player;
 import hu.uni.miskolc.iit.game.objects.Present;
 
@@ -28,7 +30,7 @@ public class DummyGame implements IGameLogic {
     private int direction = 0;
     // 2D GameObject items
     private Player playerObject;
-    private List<Present> giftObjectList = new ArrayList<>();
+    private FallenObjectManager fallenObjectManager=new FallenObjectManager();
     private C2DScene scene;
 
     public DummyGame() {
@@ -89,8 +91,8 @@ public class DummyGame implements IGameLogic {
 
         C2DGraphicsLayer playerLayer = new C2DGraphicsLayer();
         playerLayer.AddGameObject(playerObject);
-        for (GameObject2D giftObject:giftObjectList) {
-            playerLayer.AddGameObject(giftObject);
+        for (FallenObject giftObject:fallenObjectManager.getFallenObjectList()) {
+            playerLayer.AddGameObject((GameObject2D) giftObject);
         }
 
         // register layer at the scene
@@ -116,7 +118,7 @@ public class DummyGame implements IGameLogic {
 
             Present presentObject = new Present();
         presentObject.AddFrame(presentTexture);
-        giftObjectList.add(presentObject);
+        fallenObjectManager.addNewFallenObject(presentObject);
         }
     }
     private void createPlayer(Window window){
@@ -182,10 +184,7 @@ public class DummyGame implements IGameLogic {
 
     @Override
     public void update(float interval) {
-        for (Present actualGift:
-             giftObjectList) {
-            actualGift.movePresent();
-        }
+        fallenObjectManager.update();
     }
 
     @Override
@@ -197,6 +196,7 @@ public class DummyGame implements IGameLogic {
     public void cleanup() {
         renderer.cleanup();
         playerObject.cleanUp();
+fallenObjectManager.clean();
 
         MusicManager.gameMusic.delete();
         MusicManager.winMusic.delete();

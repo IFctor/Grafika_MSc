@@ -3,24 +3,37 @@ package hu.uni.miskolc.iit.game.objects;
 import hu.uni.miskolc.iit.engine.GameObject2D;
 import hu.uni.miskolc.iit.engine.Window;
 import hu.uni.miskolc.iit.engine.math.Vector2D;
+import lombok.Getter;
 
 import java.util.Random;
 
-public class Present extends GameObject2D {
+public class Present extends GameObject2D implements FallenObject{
 
     static Random r = new Random();
 
     boolean collected=false;
     int startPos;
     float moveSpeed =1.0f;
+    @Getter
+    int score=0;
 
-    public void movePresent(){
+    public boolean update(){
+        return move();
+    }
+
+    public boolean move(){
         Vector2D pos = this.GetPosition();
         pos.y += 2*moveSpeed;
         this.SetPosition(pos);
-        if(pos.y>720 || collected==true){
-            this.init();
+        if(pos.y>720){
+            return false;
         }
+        else{return true;}
+    }
+
+    @Override
+    public boolean collisionDetection(Player player) {
+        return false;
     }
 
     public Present(){
@@ -36,4 +49,8 @@ public class Present extends GameObject2D {
     }
 
 
+    @Override
+    public void cleanupObject() {
+this.cleanUp();
+    }
 }
