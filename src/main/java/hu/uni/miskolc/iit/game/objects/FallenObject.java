@@ -6,7 +6,11 @@ public interface FallenObject {
 
     int getScore();
 
-    boolean update();
+    void update();
+
+    void setVisible(boolean visible);
+
+    boolean isVisible();
 
     boolean collisionDetection(Player player);
 }

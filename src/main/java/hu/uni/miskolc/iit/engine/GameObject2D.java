@@ -2,6 +2,8 @@ package hu.uni.miskolc.iit.engine;
 
 
 import hu.uni.miskolc.iit.engine.math.Vector2D;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.ArrayList;
 
@@ -14,6 +16,8 @@ import java.util.ArrayList;
  */
 public class GameObject2D {
 
+    @Getter
+    @Setter
     private boolean mVisible;
 
     private int mID;

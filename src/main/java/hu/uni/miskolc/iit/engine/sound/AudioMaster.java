@@ -44,13 +44,12 @@ public class AudioMaster {
     }
 
     private static void initDefault() {
-        //GAME_MUSIC = loadSound(SOUNDS_LOCATION + "smb_mario_theme" + SOUNDS_EXTENSION);
         GAME_MUSIC = loadSound(SOUNDS_LOCATION + "JingleBells" + SOUNDS_EXTENSION);
         WIN_MUSIC = loadSound(SOUNDS_LOCATION + "smb_stage_clear" + SOUNDS_EXTENSION);
         DEATH_SOUND = loadSound(SOUNDS_LOCATION + "smb_mariodie" + SOUNDS_EXTENSION);
         JUMP_SOUND = loadSound(SOUNDS_LOCATION + "smb_jump-small" + SOUNDS_EXTENSION);
-        HIT_SOUND = loadSound(SOUNDS_LOCATION + "smb_bump" + SOUNDS_EXTENSION);
-        COIN_SOUND = loadSound(SOUNDS_LOCATION + "smb_coin" + SOUNDS_EXTENSION);
+        HIT_SOUND = loadSound(SOUNDS_LOCATION + "Pain" + SOUNDS_EXTENSION);
+        COIN_SOUND = loadSound(SOUNDS_LOCATION + "Slurping" + SOUNDS_EXTENSION);
         FIRE_SOUND = loadSound(SOUNDS_LOCATION + "smb_fireball" + SOUNDS_EXTENSION);
         FIRE_POWERED_SOUND = loadSound(SOUNDS_LOCATION + "smb_fireworks" + SOUNDS_EXTENSION);
         POWER_UP_SOUND = loadSound(SOUNDS_LOCATION + "smb_powerup" + SOUNDS_EXTENSION);

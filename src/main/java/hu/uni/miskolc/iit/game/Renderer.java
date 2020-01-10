@@ -5,6 +5,7 @@ import hu.uni.miskolc.iit.engine.Utils;
 import hu.uni.miskolc.iit.engine.Window;
 import hu.uni.miskolc.iit.engine.graph.ShaderProgram;
 import hu.uni.miskolc.iit.engine.graph.Transformation;
+import hu.uni.miskolc.iit.game.managers.GameManager;
 import org.joml.Matrix4f;
 
 import java.io.File;
@@ -94,7 +95,7 @@ public class Renderer {
         }
 
         // Render the sprite
-        DummyGame.sceneManager.Render();
+        GameManager.sceneManager.Render();
 
     }
 
