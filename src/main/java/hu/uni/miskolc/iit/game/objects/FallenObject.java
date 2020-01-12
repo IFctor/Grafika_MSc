@@ -13,4 +13,10 @@ public interface FallenObject {
     boolean isVisible();
 
     boolean collisionDetection(Player player);
+
+    int getLifeModifier();
+
+    long getBoosterDurationSec();
+
+    float getBoosterModifierValue();
 }

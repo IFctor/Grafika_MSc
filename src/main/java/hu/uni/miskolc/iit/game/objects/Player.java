@@ -8,7 +8,6 @@ import hu.uni.miskolc.iit.engine.sound.AudioMaster;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.io.Console;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,6 +19,10 @@ public class Player extends GameObject2D{
     private final float rightSide=AppConfig.appConfig().getWindow().getWidth()-64;
     private final float maxPlayerMoveSpeed=2f;
     private final float minPlayerMoveSpeed=0.5f;
+    private final int maximumLife=5;
+    private final int minimumLife=0;
+
+    private int actualScore;
 
     @Setter
     private int direction;
@@ -33,21 +36,58 @@ public class Player extends GameObject2D{
 
     @Setter
     private boolean dying;
-    @Setter
-    private boolean poweredUp;
-    @Setter
-    private boolean canDoubleJump;
+
+    private int actualLife;
+
+    @Getter
+    private LifeBar lifeBar;
 
     @Getter
     private List<Booster> boosterList= new ArrayList<>();
 
-    public Player() {
+    public Player(LifeBar lifeBar) {
         super();
-        dying = poweredUp = false;
+        dying = false;
         this.direction = 1;
         this.baseMoveSpeed =1.0f;
         this.actualMoveSpeed=1.0f;
         this.baseMove=5;
+        actualLife=5;
+        this.lifeBar=lifeBar;
+        this.lifeBar.SetCurrentFrame(actualLife);
+        this.actualScore=0;
+
+    }
+
+    public void addScore(int score){
+        this.actualScore+=score;
+    }
+    public void setLife(int life){
+        if(life>=minimumLife && life <=maximumLife)
+        {actualLife=life;}
+        else {
+            actualLife=0;
+        }
+        setLifeBarToCurrentLife();
+    }
+
+    public void addLife(int life){
+        if(this.dying==true)
+        {
+            this.actualLife=0;
+        }
+        else {
+            this.actualLife += life;
+        }
+        setLifeBarToCurrentLife();
+    }
+
+    private void setLifeBarToCurrentLife(){
+
+        if(actualLife<minimumLife){actualLife=minimumLife;}
+        if(actualLife>maximumLife){actualLife=maximumLife;}
+        if(actualLife==0){this.die();}
+        this.lifeBar.SetCurrentFrame(actualLife);
     }
 
     private void updateBoost()

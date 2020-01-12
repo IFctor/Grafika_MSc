@@ -5,6 +5,7 @@ import hu.uni.miskolc.iit.game.objects.Player;
 import lombok.Getter;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -15,11 +16,10 @@ public class FallenObjectManager {
     List<FallenObject> fallenObjectList = new ArrayList<>();
 
     int actualmaximumFallenObject=1;
-    float oldSystemTime;
+    int oldSeconds;
 
     public void update()
     {
-        oldSystemTime=System.currentTimeMillis()/1000;
 
         //Csak azokat updateljük amik látszódnak
         int countVisible=0;
@@ -31,24 +31,26 @@ public class FallenObjectManager {
                 countVisible++;
             }
         }
-        System.out.println("countVisible: "+ countVisible);
-        if(countVisible<actualmaximumFallenObject) {
-            System.out.println("new init");
+
+        int newSeconds=new Date().getSeconds();
+
+        if(Integer.compare(oldSeconds,newSeconds)!=0) {
+            oldSeconds = newSeconds;
+            if (countVisible < actualmaximumFallenObject) {
                 newFallenObject();
             }
-        incrementMaximumObject();
-
+            incrementMaximumObject();
+        }
     }
 
     private void incrementMaximumObject(){
-
-        if ((System.currentTimeMillis()/1000) % 30 == 0) {
+        if (oldSeconds % 20 == 0) {
             actualmaximumFallenObject++;
         }
     }
     public void newFallenObject()
     {
-        if ((System.currentTimeMillis()/1000) % 10 == 0) {
+        if (oldSeconds % 5 == 0) {
             List<FallenObject> notVisible = fallenObjectList.stream()
                     .filter(f -> !f.isVisible())
                     .collect(Collectors.toList());
@@ -71,18 +73,19 @@ public class FallenObjectManager {
         fallenObjectList.add(fallenObject);
     }
 
-    public int collisionDetection(Player player){
+    public void collisionDetection(Player player){
         int gainedPoints=0;
         for (FallenObject fallenObject:fallenObjectList.stream()
                 .filter(f->f.isVisible())
                 .collect(Collectors.toList())) {
             if(fallenObject.collisionDetection(player)==true)
             {
-                gainedPoints+=fallenObject.getScore();
+                player.addScore(fallenObject.getScore());
+                player.addLife(fallenObject.getLifeModifier());
+                player.addBooster(fallenObject.getBoosterDurationSec(),fallenObject.getBoosterModifierValue());
                 fallenObject.setVisible(false);
             }
         }
-        return gainedPoints;
     }
 
 }

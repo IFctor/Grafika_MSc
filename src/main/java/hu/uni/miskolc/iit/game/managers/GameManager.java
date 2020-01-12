@@ -5,11 +5,7 @@ import hu.uni.miskolc.iit.config.AppConfig;
 import hu.uni.miskolc.iit.engine.*;
 import hu.uni.miskolc.iit.engine.sound.AudioMaster;
 import hu.uni.miskolc.iit.game.Renderer;
-import hu.uni.miskolc.iit.game.objects.FallenObject;
-import hu.uni.miskolc.iit.game.managers.FallenObjectManager;
-import hu.uni.miskolc.iit.game.objects.Player;
-import hu.uni.miskolc.iit.game.objects.Present;
-import hu.uni.miskolc.iit.game.objects.Score;
+import hu.uni.miskolc.iit.game.objects.*;
 
 import java.io.File;
 
@@ -43,7 +39,10 @@ public class GameManager implements IGameLogic {
     public void init(Window window) throws Exception {
         renderer.init(window);
         createPlayer();
-        createNewGift();
+        createNewGifts();
+        createNewCoals();
+        createNewCookies();
+        createNewMilks();
         initScenes();
         initSound();
     }
@@ -55,12 +54,12 @@ public class GameManager implements IGameLogic {
         Texture2D background = new Texture2D();
         background.CreateTexture(TEXTURES_LOCATION + BACKGROUND_LOCATION + "layer_sd_01" + TEXTURES_EXTENSION);
 
-        // Create a cloud layer
+        // Create a mountain layer
         Texture2D mountains = new Texture2D();
         mountains.CreateTexture(TEXTURES_LOCATION + BACKGROUND_LOCATION + "layer_sd_07" + TEXTURES_EXTENSION);
 
-        // Create a mountain layer
-        /*Texture2D mountains = new Texture2D();
+        // Create a cloud layer
+        /*Texture2D cloud = new Texture2D();
         mountains.CreateTexture(TEXTURES_LOCATION + BACKGROUND_LOCATION + "layer_sd_03" + TEXTURES_EXTENSION);*/
 
         // Create a tree layer
@@ -91,6 +90,7 @@ public class GameManager implements IGameLogic {
 
         C2DGraphicsLayer playerLayer = new C2DGraphicsLayer();
         playerLayer.AddGameObject(playerObject);
+        playerLayer.AddGameObject(playerObject.getLifeBar());
         for (FallenObject giftObject:fallenObjectManager.getFallenObjectList()) {
             playerLayer.AddGameObject((GameObject2D) giftObject);
         }
@@ -107,22 +107,72 @@ public class GameManager implements IGameLogic {
         sceneManager.RegisterScene(scene);
     }
 
-    private void createNewGift()
+    private void createNewGifts()
     {
         final String santaDirectory = "Present/";
+        for (int i=1; i<=17;i++){
+            CSprite presentTexture = new CSprite(TEXTURES_LOCATION + santaDirectory+"Present_"+i, 1, 200, 200);
+            int plusScore=0;
+            if(i<15) {
+                plusScore=50;
+            }
+            Present presentObject = new Present(i * 10+plusScore);
 
-
-        for (int i=1; i<=8;i++){
-
-        CSprite presentTexture = new CSprite(TEXTURES_LOCATION + santaDirectory+"Present_"+i, 1, 200, 200);
-
-            Present presentObject = new Present(i*10);
-        presentObject.AddFrame(presentTexture);
-        fallenObjectManager.addNewFallenObject(presentObject);
+            presentObject.AddFrame(presentTexture);
+            fallenObjectManager.addNewFallenObject(presentObject);
         }
     }
+    private void createNewCoals()
+    {
+        final String santaDirectory = "Coal/";
+        for (int i=1; i<=11;i++){
+            CSprite coalTexture = new CSprite(TEXTURES_LOCATION + santaDirectory+"Coal_"+i, 1, 200, 200);
+
+            int modifierMult=1;
+            if(i<9) {
+                modifierMult=2;
+            }
+                Coal coalObject = new Coal(10*modifierMult,-2f*modifierMult);
+
+            coalObject.AddFrame(coalTexture);
+            fallenObjectManager.addNewFallenObject(coalObject);
+        }
+    }
+    private void createNewCookies()
+    {
+        final String santaDirectory = "Boost/";
+        for (int i=1; i<=6;i++){
+            CSprite cookieTexture = new CSprite(TEXTURES_LOCATION + santaDirectory+"Cookie_"+i, 1, 200, 200);
+
+            int addLife=0;
+            if(i<5) {
+                addLife=1;
+            }
+            Cookie coalObject = new Cookie(addLife,10,+2f);
+
+            coalObject.AddFrame(cookieTexture);
+            fallenObjectManager.addNewFallenObject(coalObject);
+        }
+    }
+
+    private void createNewMilks()
+    {
+        final String santaDirectory = "Boost/";
+        for (int i=1; i<=2;i++){
+            CSprite milkTexture = new CSprite(TEXTURES_LOCATION + santaDirectory+"Milk_"+i, 1, 200, 200);
+
+            Milk milkObject = new Milk(1,20,+2f);
+
+            milkObject.AddFrame(milkTexture);
+            fallenObjectManager.addNewFallenObject(milkObject);
+        }
+    }
+
     private void createPlayer(){
-        playerObject = new Player();
+
+LifeBar lifeBar = createLifeBar();
+
+        playerObject = new Player(lifeBar);
         final String santaDirectory = "Santa_sprites/";
 
         CSprite frameRunRight = new CSprite(TEXTURES_LOCATION + santaDirectory+"Santa_Run_", 8, 200, 200);
@@ -136,6 +186,16 @@ public class GameManager implements IGameLogic {
         playerObject.AddFrame(frameRunLeft);
 
         playerObject.SetPosition(200, 600);
+    }
+
+    private LifeBar createLifeBar(){
+        LifeBar lifeBar=new LifeBar();
+        for (int i=0; i<=5;i++) {
+            CSprite life = new CSprite(TEXTURES_LOCATION + "Heart/" + "lifeBar_" + i, 1, 200, 200);
+            lifeBar.AddFrame(life);
+        }
+        lifeBar.SetPosition(0,0);
+        return lifeBar;
     }
 
     private void initSound(){
@@ -176,15 +236,25 @@ public class GameManager implements IGameLogic {
             playerObject.addBooster(10,-1);
         }
 
-        if(window.isKeyPressed(GLFW_KEY_F1)){
-            playerObject.die();
+        if(window.isKeyPressed(GLFW_KEY_1)){
+            playerObject.setLife(0);
+        }else if(window.isKeyPressed(GLFW_KEY_2)){
+            playerObject.setLife(1);
+        }else if(window.isKeyPressed(GLFW_KEY_3)){
+            playerObject.setLife(2);
+        }else if(window.isKeyPressed(GLFW_KEY_4)){
+            playerObject.setLife(3);
+        }else if(window.isKeyPressed(GLFW_KEY_5)){
+            playerObject.setLife(4);
+        }else if(window.isKeyPressed(GLFW_KEY_6)){
+            playerObject.setLife(5);
         }
     }
 
     @Override
     public void update(float interval) {
         fallenObjectManager.update();
-        scoreObject.addToActualScore(fallenObjectManager.collisionDetection(playerObject));
+        fallenObjectManager.collisionDetection(playerObject);
     }
 
     @Override
