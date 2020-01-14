@@ -137,4 +137,10 @@ public class Player extends GameObject2D{
         MusicManager.deathSound.play(AudioMaster.DEATH_SOUND);
         this.dying=true;
     }
+
+    @Override
+    public void cleanUp(){
+        lifeBar.cleanUp();
+        super.cleanUp();
+    }
 }

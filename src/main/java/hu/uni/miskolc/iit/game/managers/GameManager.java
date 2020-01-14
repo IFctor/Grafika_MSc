@@ -28,6 +28,8 @@ public class GameManager implements IGameLogic {
 
     private FallenObjectManager fallenObjectManager=new FallenObjectManager();
 
+    private boolean gameRuning=false;
+
 
     public GameManager() {
         renderer = new Renderer();
@@ -38,14 +40,26 @@ public class GameManager implements IGameLogic {
     @Override
     public void init(Window window) throws Exception {
         renderer.init(window);
+        createNewGame();
+    }
+
+    private void createNewGame()
+    {
         createPlayer();
+        createFallenObjects();
+        initScenes();
+        initSound();
+    }
+
+    private void createFallenObjects(){
+        fallenObjectManager.clean();
+        fallenObjectManager=new FallenObjectManager();
         createNewGifts();
         createNewCoals();
         createNewCookies();
         createNewMilks();
-        initScenes();
-        initSound();
     }
+
     private void initScenes() {
         sceneManager = new C2DSceneManager();
         scene = new C2DScene();
@@ -218,43 +232,36 @@ LifeBar lifeBar = createLifeBar();
     }
     @Override
     public void input(Window window) {
-        if (playerObject.getDirection() == 1) {
-            playerObject.SetCurrentFrame(0);
-        } else {
-            playerObject.SetCurrentFrame(1);
+        if(gameRuning==true) {
+            if (playerObject.getDirection() == 1) {
+                playerObject.SetCurrentFrame(0);
+            } else {
+                playerObject.SetCurrentFrame(1);
+            }
+
+            if (window.isKeyPressed(GLFW_KEY_LEFT)) {
+                playerObject.movePlayerLeft();
+            } else if (window.isKeyPressed(GLFW_KEY_RIGHT)) {
+                playerObject.movePlayerRight();
+            }
         }
 
-        if (window.isKeyPressed(GLFW_KEY_LEFT)) {
-            playerObject.movePlayerLeft();
-        } else if (window.isKeyPressed(GLFW_KEY_RIGHT)) {
-            playerObject.movePlayerRight();
-        }
-
-        if (window.isKeyPressed(GLFW_KEY_Q)) {
-            playerObject.addBooster(10,1);
-        } else if (window.isKeyPressed(GLFW_KEY_W)) {
-            playerObject.addBooster(10,-1);
-        }
-
-        if(window.isKeyPressed(GLFW_KEY_1)){
-            playerObject.setLife(0);
-        }else if(window.isKeyPressed(GLFW_KEY_2)){
-            playerObject.setLife(1);
-        }else if(window.isKeyPressed(GLFW_KEY_3)){
-            playerObject.setLife(2);
-        }else if(window.isKeyPressed(GLFW_KEY_4)){
-            playerObject.setLife(3);
-        }else if(window.isKeyPressed(GLFW_KEY_5)){
-            playerObject.setLife(4);
-        }else if(window.isKeyPressed(GLFW_KEY_6)){
-            playerObject.setLife(5);
+        if(window.isKeyPressed(GLFW_KEY_F1)){
+            //Pause/Continue game
+            gameRuning=!gameRuning;
+        }else if(window.isKeyPressed(GLFW_KEY_F2)){
+            //New game
+            createNewGame();
         }
     }
 
     @Override
     public void update(float interval) {
+        if(gameRuning==true){
         fallenObjectManager.update();
         fallenObjectManager.collisionDetection(playerObject);
+        gameRuning=!playerObject.isDying();
+        }
     }
 
     @Override
