@@ -9,7 +9,7 @@ public class Coal extends FallenObjectImpl{
 
     public Coal(int boosterDurationSec, float boosterModifierValue,int modifiervalue,int modellId){
         super(-5*modifiervalue,
-                -10*modifiervalue,
+                -1*modifiervalue,
                 boosterDurationSec*modifiervalue,
                 boosterModifierValue*modifiervalue,
                 modellId);
