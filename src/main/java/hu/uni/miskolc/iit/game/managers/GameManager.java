@@ -120,15 +120,7 @@ public class GameManager implements IGameLogic {
 
         // Create a mountain layer
         Texture2D mountains = new Texture2D();
-        mountains.CreateTexture(TEXTURES_LOCATION + BACKGROUND_LOCATION + "layer_sd_07" + TEXTURES_EXTENSION);
-
-        // Create a tree layer
-        Texture2D trees = new Texture2D();
-        trees.CreateTexture(TEXTURES_LOCATION + BACKGROUND_LOCATION + "layer_sd_04" + TEXTURES_EXTENSION);
-
-        // Create a ground layer
-        Texture2D ground = new Texture2D();
-        ground.CreateTexture(TEXTURES_LOCATION + BACKGROUND_LOCATION + "layer_sd_05" + TEXTURES_EXTENSION);
+        mountains.CreateTexture(TEXTURES_LOCATION + BACKGROUND_LOCATION + "layer_sd_02" + TEXTURES_EXTENSION);
 
         // Create graphics layer
         C2DGraphicsLayer layer0 = new C2DGraphicsLayer();
