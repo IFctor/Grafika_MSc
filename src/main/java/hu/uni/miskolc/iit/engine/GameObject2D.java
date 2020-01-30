@@ -25,6 +25,10 @@ public class GameObject2D {
     // Entity Name
     private String mName = "";
 
+    @Getter
+    @Setter
+    private boolean DrawJustOnce=false;
+
     private Vector2D m_vPosition; // Position of the object
     private Vector2D m_vDirection; // Direction of the movement
     private float mScale; // scale value

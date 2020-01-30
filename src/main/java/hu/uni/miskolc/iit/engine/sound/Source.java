@@ -4,6 +4,7 @@ import org.lwjgl.openal.AL10;
 
 public class Source {
     private int sourceId;
+    private int buffer;
 
     public Source() {
         sourceId = AL10.alGenSources();
@@ -12,10 +13,14 @@ public class Source {
         AL10.alSource3f(sourceId, AL10.AL_POSITION, 0, 0, 0);
     }
 
-    public void play(final int buffer) {
+    public void play() {
         stop();
         AL10.alSourcei(sourceId, AL10.AL_BUFFER, buffer);
         continuePlay();
+    }
+
+    public void init(final int buffer){
+        this.buffer=buffer;
     }
 
     public void pause() {

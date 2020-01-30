@@ -18,14 +18,11 @@ public class AudioMaster {
     private static final String SOUNDS_LOCATION = AppConfig.appConfig().getSounds().getLocation() + File.separator;
     private static final String SOUNDS_EXTENSION = SYS_EXTENSION_SEPARATOR + AppConfig.appConfig().getSounds().getExtension();
     public static int GAME_MUSIC;
-    public static int WIN_MUSIC;
+    public static int HOHOHO_SOUND;
     public static int DEATH_SOUND;
-    public static int JUMP_SOUND;
     public static int HIT_SOUND;
-    public static int COIN_SOUND;
-    public static int FIRE_SOUND;
-    public static int FIRE_POWERED_SOUND;
-    public static int POWER_UP_SOUND;
+    public static int DRINK_SOUND;
+    public static int EAT_SOUND;
     private static List<Integer> buffers = new ArrayList<>();
     private static long device;
     private static long context;
@@ -45,14 +42,11 @@ public class AudioMaster {
 
     private static void initDefault() {
         GAME_MUSIC = loadSound(SOUNDS_LOCATION + "JingleBells" + SOUNDS_EXTENSION);
-        WIN_MUSIC = loadSound(SOUNDS_LOCATION + "smb_stage_clear" + SOUNDS_EXTENSION);
-        DEATH_SOUND = loadSound(SOUNDS_LOCATION + "smb_mariodie" + SOUNDS_EXTENSION);
-        JUMP_SOUND = loadSound(SOUNDS_LOCATION + "smb_jump-small" + SOUNDS_EXTENSION);
+        DEATH_SOUND = loadSound(SOUNDS_LOCATION + "Dead" + SOUNDS_EXTENSION);
+        HOHOHO_SOUND = loadSound(SOUNDS_LOCATION + "Ho_ho_ho" + SOUNDS_EXTENSION);
         HIT_SOUND = loadSound(SOUNDS_LOCATION + "Pain" + SOUNDS_EXTENSION);
-        COIN_SOUND = loadSound(SOUNDS_LOCATION + "Slurping" + SOUNDS_EXTENSION);
-        FIRE_SOUND = loadSound(SOUNDS_LOCATION + "smb_fireball" + SOUNDS_EXTENSION);
-        FIRE_POWERED_SOUND = loadSound(SOUNDS_LOCATION + "smb_fireworks" + SOUNDS_EXTENSION);
-        POWER_UP_SOUND = loadSound(SOUNDS_LOCATION + "smb_powerup" + SOUNDS_EXTENSION);
+        DRINK_SOUND = loadSound(SOUNDS_LOCATION + "Slurping" + SOUNDS_EXTENSION);
+        EAT_SOUND = loadSound(SOUNDS_LOCATION + "Eat" + SOUNDS_EXTENSION);
     }
 
     public static void setListenerData() {

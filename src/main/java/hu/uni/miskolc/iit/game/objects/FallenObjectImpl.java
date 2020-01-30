@@ -7,73 +7,87 @@ import lombok.Getter;
 
 import java.util.Random;
 
-public class FallenObjectImpl  extends GameObject2D implements FallenObject {
+public class FallenObjectImpl extends GameObject2D implements FallenObject {
 
     static private Random r = new Random();
 
-    private float moveSpeed =1.0f;
+    private float moveSpeed = 1.0f;
     @Getter
-    private int score=0;
+    private int score = 0;
     @Getter
-    private int lifeModifier=0;
+    private int lifeModifier = 0;
     @Getter
-    private long boosterDurationSec=0;
+    private long boosterDurationSec = 0;
     @Getter
-    private float boosterModifierValue=0;
+    private float boosterModifierValue = 0;
+    @Getter
+    private int id;
 
     @Override
     public void update() {
-move();
+        move();
     }
 
-    public void move(){
+    public void move() {
         Vector2D pos = this.GetPosition();
-        pos.y += 2*moveSpeed;
+        pos.y += 2 * moveSpeed;
         this.SetPosition(pos);
-        if(pos.y>720){
+        if (pos.y > 720) {
             init();
         }
     }
 
-    FallenObjectImpl(int score,int lifeModifier, int boosterDurationSec, float boosterModifierValue){
+    FallenObjectImpl(int score, int lifeModifier, int boosterDurationSec, float boosterModifierValue, int modelId) {
         super();
-        this.score=score;
-        this.lifeModifier=lifeModifier;
-        this.boosterDurationSec=boosterDurationSec;
-        this.boosterModifierValue=boosterModifierValue;
+        this.score = score;
+        this.lifeModifier = lifeModifier;
+        this.boosterDurationSec = boosterDurationSec;
+        this.boosterModifierValue = boosterModifierValue;
+        this.id = modelId;
         this.init();
     }
 
     @Override
     public boolean collisionDetection(Player player) {
-        boolean result=false;
+        boolean result = false;
         BoundingBox2D boundingBox = this.GetCurrentFrame().getCurrentFrameTransformedBoundingBox();
         if (boundingBox.CheckOverlapping(player.GetCurrentFrame().getCurrentFrameTransformedBoundingBox())) {
-            result=true;
+            result = true;
+            playEffectSound();
             init();
 
         }
         return result;
     }
-     void init(){
+
+    void init() {
         int startPos = r.nextInt((20 - 0) + 1) + 0;
-        this.SetPosition(50+startPos*50,-100);
-        moveSpeed = (r.nextInt((3 - 1) + 1) + 1)/1.2f;
+        this.SetPosition(50 + startPos * 50, -100);
+        moveSpeed = (r.nextInt((3 - 1) + 1) + 1) / 1.2f;
         this.setMVisible(false);
     }
 
-    public void setVisible(boolean visible){
+    public void setVisible(boolean visible) {
         this.setMVisible(visible);
     }
 
-    public boolean isVisible()
-    {
+    public boolean isVisible() {
         return this.isMVisible();
     }
 
+    protected void playEffectSound(){}
 
     @Override
     public void cleanupObject() {
         this.cleanUp();
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder result = new StringBuilder();
+        result.append(this.getClass().toString());
+        result.append(" - ");
+        result.append(this.id);
+        return result.toString();
     }
 }

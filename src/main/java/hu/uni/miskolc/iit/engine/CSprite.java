@@ -165,7 +165,7 @@ public class CSprite {
         tex.Draw(pos);
         if (1000.0f / m_iFps < (System.currentTimeMillis() - m_iLastUpdate)) {
             m_iLastUpdate = System.currentTimeMillis();
-            if (m_iActualFrame == m_vFrames.size()) {
+            if (m_iActualFrame < m_vFrames.size()-1) {
                 m_iActualFrame++;
             }
         }

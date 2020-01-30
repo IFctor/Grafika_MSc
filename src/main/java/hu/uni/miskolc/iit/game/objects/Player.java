@@ -13,16 +13,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Getter
-public class Player extends GameObject2D{
+public class Player extends GameObject2D {
 
-    private final float leftSide=0f;
-    private final float rightSide=AppConfig.appConfig().getWindow().getWidth()-64;
-    private final float maxPlayerMoveSpeed=2f;
-    private final float minPlayerMoveSpeed=0.5f;
-    private final int maximumLife=5;
-    private final int minimumLife=0;
-
-    private int actualScore;
+    private final float leftSide = 0f;
+    private final float rightSide = AppConfig.appConfig().getWindow().getWidth() - 64;
+    private final float maxPlayerMoveSpeed = 2f;
+    private final float minPlayerMoveSpeed = 0.5f;
+    private final int maximumLife = 5;
+    private final int minimumLife = 0;
 
     @Setter
     private int direction;
@@ -43,103 +41,119 @@ public class Player extends GameObject2D{
     private LifeBar lifeBar;
 
     @Getter
-    private List<Booster> boosterList= new ArrayList<>();
+    private ScoreBar scoreBar;
 
-    public Player(LifeBar lifeBar) {
+    @Getter
+    private List<Booster> boosterList = new ArrayList<>();
+
+    public Player(LifeBar lifeBar, ScoreBar scoreBar) {
         super();
+        this.lifeBar = lifeBar;
+        this.scoreBar = scoreBar;
+        initPlayer();
+    }
+
+    public void addScore(int score) {
+        this.scoreBar.AddScorePoints(score);
+    }
+
+    public void initPlayer(){
         dying = false;
+        this.setDrawJustOnce(false);
+        this.SetCurrentFrame(0);
         this.direction = 1;
-        this.baseMoveSpeed =1.0f;
-        this.actualMoveSpeed=1.0f;
-        this.baseMove=5;
-        actualLife=5;
-        this.lifeBar=lifeBar;
+        this.baseMoveSpeed = 1.0f;
+        this.actualMoveSpeed = 1.0f;
+        this.baseMove = 5;
+        actualLife = 5;
         this.lifeBar.SetCurrentFrame(actualLife);
-        this.actualScore=0;
-
+        this.scoreBar.init();
     }
 
-    public void addScore(int score){
-        this.actualScore+=score;
-    }
-    public void setLife(int life){
-        if(life>=minimumLife && life <=maximumLife)
-        {actualLife=life;}
-        else {
-            actualLife=0;
-        }
-        setLifeBarToCurrentLife();
-    }
-
-    public void addLife(int life){
-        if(this.dying==true)
-        {
-            this.actualLife=0;
-        }
-        else {
+    public void addLife(int life) {
+        if (this.dying == true) {
+            this.actualLife = 0;
+        } else {
             this.actualLife += life;
         }
         setLifeBarToCurrentLife();
     }
 
-    private void setLifeBarToCurrentLife(){
+    private void setLifeBarToCurrentLife() {
 
-        if(actualLife<minimumLife){actualLife=minimumLife;}
-        if(actualLife>maximumLife){actualLife=maximumLife;}
-        if(actualLife==0){this.die();}
+        if (actualLife < minimumLife) {
+            actualLife = minimumLife;
+        }
+        if (actualLife > maximumLife) {
+            actualLife = maximumLife;
+        }
+        if (actualLife == 0) {
+            this.die();
+        }
         this.lifeBar.SetCurrentFrame(actualLife);
     }
 
-    private void updateBoost()
-    {
-        actualMoveSpeed=baseMoveSpeed;
-        for (Booster booster:boosterList.stream()
+    private void updateBoost() {
+        actualMoveSpeed = baseMoveSpeed;
+        for (Booster booster : boosterList.stream()
                 .collect(Collectors.toList())) {
-            if(booster.endUNIXTimeMillis>System.currentTimeMillis()) {
-                actualMoveSpeed += booster.modifierValue/10;
-            }
-            else{
+            if (booster.endUNIXTimeMillis > System.currentTimeMillis()) {
+                actualMoveSpeed += booster.modifierValue / 10;
+            } else {
                 boosterList.remove(booster);
+            }
+            //Hogy ne legyen negatív sebességünk
+            if(actualMoveSpeed<0){
+                actualMoveSpeed=0;
             }
         }
     }
 
-
-    public void addBooster(long durationSec, float modifierValue){
-        boosterList.add(new Booster(durationSec,modifierValue){});
+    public void addBooster(long durationSec, float modifierValue) {
+        boosterList.add(new Booster(durationSec, modifierValue) {
+        });
     }
 
-    public void movePlayerLeft(){
+    public void movePlayerLeft() {
         direction = -1;
         this.SetCurrentFrame(3);
         movePlayer();
     }
 
-    public void movePlayerRight(){
+    public void movePlayerRight() {
         direction = 1;
         this.SetCurrentFrame(2);
         movePlayer();
     }
 
-    private void movePlayer(){
+    private void movePlayer() {
         updateBoost();
-        if(this.dying==false){
-        Vector2D pos = this.GetPosition();
-        pos.x += direction*baseMove*this.actualMoveSpeed;
-        if (pos.x> rightSide)
-        {pos.x=rightSide;}
-        else if (pos.x<leftSide){pos.x=leftSide;}
-        this.SetPosition(pos);
+        if (this.dying == false) {
+            Vector2D pos = this.GetPosition();
+            pos.x += direction * baseMove * this.actualMoveSpeed;
+            if (pos.x > rightSide) {
+                pos.x = rightSide;
+            } else if (pos.x < leftSide) {
+                pos.x = leftSide;
+            }
+            this.SetPosition(pos);
         }
     }
 
     public void die() {
-        MusicManager.deathSound.play(AudioMaster.DEATH_SOUND);
-        this.dying=true;
+        MusicManager.deathSound.play();
+        if(direction == 1){
+        this.SetCurrentFrame(4);}
+        else {
+            this.SetCurrentFrame(5);
+            this.GetPosition().x-=53;
+        }
+        this.setDrawJustOnce(true);
+        this.dying = true;
     }
 
     @Override
-    public void cleanUp(){
+    public void cleanUp() {
         lifeBar.cleanUp();
         super.cleanUp();
     }

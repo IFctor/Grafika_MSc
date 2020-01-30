@@ -179,7 +179,12 @@ public class C2DGraphicsLayer {
             if (obj.GetVisible() == false)
                 continue;
 
-            obj.Draw();
+            if(obj.isDrawJustOnce()==false) {
+                obj.Draw();
+            }
+            else{
+                obj.DrawOnce();
+            }
         }
     }
 

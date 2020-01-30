@@ -4,11 +4,14 @@ import hu.uni.miskolc.iit.engine.GameObject2D;
 import lombok.Getter;
 import lombok.Setter;
 
-public class Score{
+public class Score extends GameObject2D{
     @Getter
     private int actualScore = 0;
 
-    public void addToActualScore(int addedScore){
-        actualScore+=addedScore;
+    public void setActualScore(int actualScore) {
+        if(actualScore>=0 && actualScore<=9) {
+            this.actualScore = actualScore;
+            this.SetCurrentFrame(actualScore);
+        }
     }
 }
